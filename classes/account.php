@@ -1,15 +1,15 @@
 <?php
 class Account
 {
-    private $account_number;
-    private $account_type;
-    private $account_balance;
-    private $account_status;
-    private $account_created_at;
-    private $account_updated_at;
-    private $account_deleted_by;
-    private $account_deleted_reason;
-    private $account_deleted_at;
+    protected ?int $account_number = 0;
+    protected ?string $account_type = null;
+    protected ?float $account_balance = 0.00;
+    protected ?string $account_status = null;
+    protected ?string $account_created_at = null;
+    protected ?string $account_updated_at = null;
+    protected ?string $account_deleted_by = null;
+    protected ?string $account_deleted_reason = null;
+    protected ?string $account_deleted_at = null;
     public function getAccountNumber()
     {
         return $this->account_number;
@@ -57,9 +57,13 @@ class Account
 
 
     // Set Account Number
-    public function setAccountNumber($account_number)
+    public function setAccountNumber(bool $account_status = false)
     {
-        $this->account_number = $account_number;
+        if ($account_status === true) {
+            $card_number = substr(rand(1000, PHP_INT_MAX), 0, 16);
+            $this->account_number = (int) $card_number;
+        }
+        return $this->account_number;
     }
 
     // Set Account Type
@@ -109,5 +113,18 @@ class Account
     {
         $this->account_deleted_at = $account_deleted_at;
     }
+
+    public function getFullDetails() : string{
+        return json_encode([
+            "account number" => $this->account_number,
+            "account type" => $this->account_type,
+            "account balance" => $this->account_balance,
+            "account status" => $this->account_status,
+            "account created at" => $this->account_created_at,
+            "account updated at" => $this->account_updated_at,
+            "account deleted by" => $this->account_deleted_by,
+            "account deleted reason" => $this->account_deleted_reason,
+            "account deleted at" => $this->account_deleted_at,
+        ], JSON_OBJECT_AS_ARRAY);
+    }
 };
-?>
